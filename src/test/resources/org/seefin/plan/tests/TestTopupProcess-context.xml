@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="
+	         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- state values in the topup process workflow -->
+	<util:constant id="CREATED" static-field="org.seefin.plan.tests.topup.TopupState.CREATED" />
+	<util:constant id="VALIDATED" static-field="org.seefin.plan.tests.topup.TopupState.VALIDATED" />
+	<util:constant id="AUTHORIZED" static-field="org.seefin.plan.tests.topup.TopupState.AUTHORIZED" />
+	<util:constant id="PAID" static-field="org.seefin.plan.tests.topup.TopupState.PAID" />
+	<util:constant id="ELIGIBLE" static-field="org.seefin.plan.tests.topup.TopupState.ELIGIBLE" />
+	<util:constant id="CREDIT_APPLIED" static-field="org.seefin.plan.tests.topup.TopupState.CREDIT_APPLIED" />
+	<util:constant id="NOTIFIED" static-field="org.seefin.plan.tests.topup.TopupState.NOTIFIED" />
+	<util:constant id="FAILED" static-field="org.seefin.plan.tests.topup.TopupState.FAILED" />
+
+	<!-- activities used in processing a topup request -->
+	<bean id="validator" class="org.seefin.plan.tests.topup.Validator" />
+	<bean id="authorizer" class="org.seefin.plan.tests.topup.Authorizer" />
+	<bean id="payer" class="org.seefin.plan.tests.topup.Payer" />
+	<bean id="checkEligibility" class="org.seefin.plan.tests.topup.EligibilityChecker" />
+	<bean id="recharger" class="org.seefin.plan.tests.topup.Recharger" />
+	<bean id="notifier" class="org.seefin.plan.tests.topup.Notifier" />
+
+	<bean id="topupWorkflow" class="org.seefin.plan.process.definition.ProcessGroup" >
+		<property name="transitions">
+			<util:map>
+				<entry key-ref="CREATED" value-ref="validator" />
+				<entry key-ref="VALIDATED" value-ref="authorizer" />
+				<entry key-ref="AUTHORIZED" value-ref="payer" />
+				<entry key-ref="PAID" value-ref="recharger" />
+				<entry key-ref="CREDIT_APPLIED" value-ref="notifier" />
+			</util:map>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plan="http://seefin.org/schema/plan"
+       xmlns:ctx="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       		http://seefin.org/schema/plan http://seefin.org/schema/plan/process-1.0.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" >
+			
+	<ctx:annotation-config />
+	<ctx:component-scan base-package="org.seefin.plan.tests.topup" />
+	
+	<plan:process id="bad01" initial-state="CREATED"
+			      state-class="org.seefin.plan.tests.topup.TopupState" >
+		<plan:node state="CREATED" action-ref="validator" />
+		<plan:node state="VALIDATED" action-ref="payer" />
+		<plan:node state="PAID" >
+		</plan:node>
+		<plan:node state="CREDIT_APPLIED" action-ref="notifier" />
+	</plan:process>
+
+</beans>

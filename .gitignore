@@ -1,0 +1,30 @@
+.gradle
+*.bak
+**/build/
+**/logs/
+**/classes/
+**/test-output/
+**/target/
+!gradle/wrapper/gradle-wrapper.jar
+**/bin/
+**/out/
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+*.log
+
+### Visual Studio Code ###
+.angulardoc.json

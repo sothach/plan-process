@@ -1,0 +1,66 @@
+<html>
+Helper classes supporting the Plan custom schema extension for Spring
+<body>
+ <head>
+    <title>PLAN Spring Extension</title>
+ </head>
+<style> 
+    <!--
+	p { color:#0B0B61; font-size:10pt;
+		font-family:"comic sans ms",sans-serif; }
+	h1 { color:#660000; font-family:"arial"; font-size:14pt; }
+	h2 { color:#660000; font-family:"arial"; font-size:12pt; }
+dl {
+    margin-bottom:50px;
+}
+ 
+dt {
+    float:left;
+    font-weight:bold;
+    margin-right:1px;
+    padding:1px;
+    width:15%;
+}
+ 
+dd {
+    margin:1px 0;
+    padding:1px 0;
+}
+    -->
+</style>
+<h1>Plan Spring Schema</h1>
+<h2>Enables declarative process definition in Spring</h2>
+<p>
+The Spring framework supports custom extensions to its XSD schema
+(see <a href="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/extensible-xml.html">Extensible XML authoring</a>)
+
+<h2>Spring Context</h2>
+<p>
+The easiest way to define a process, is by using the Plan xsd schema in a Spring context definition.
+See {@link org.seefin.plan.process.ProcessGroup} for an example of this syntax.
+<p>
+The schema can be included in the Spring context by mapping the prefix, as in the XML header below:
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       <b>xmlns:plan=<font color='blue'>"http://seefin.org/schema/plan"</font></b>
+       xmlns:ctx="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="<b><font color='blue'>
+       		http://seefin.org/schema/plan http://seefin.org/schema/plan/process-1.0.xsd</font></b>
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" &gt;
+</pre>
+Now, a PLAN process definition can be defined using the <code>plan:</code> namespace defined:
+<pre><font color='green'>
+ &lt;plan:process <font color='brown'>id=<font color='blue'>"flightBooker"</font> 
+ 	<font color='brown'>state-class=<font color='blue'>"org.seefin.plan.tests.booking.BookingState"</font> &gt;<font color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"OPEN"</font> <font color='brown'>action-ref=<font color='blue'>"validator"</font> /&gt;<font color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"PAID"</font> <font color='brown'>action=<font color='blue'>"org.seefin.plan.tests.booking.BookingAction"</font> /&gt;<font color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"BOOKED</font>" <font color='brown'>action-ref=<font color='blue'>"notifier"</font> /&gt;<font color='green'>
+ &lt;/plan:process&gt;
+</pre>
+<p>
+
+</body>
+</html>
