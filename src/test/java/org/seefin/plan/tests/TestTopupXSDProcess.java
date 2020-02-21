@@ -1,9 +1,5 @@
 package org.seefin.plan.tests;
 
-import java.math.BigDecimal;
-
-import javax.annotation.Resource;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,28 +9,28 @@ import org.seefin.plan.tests.topup.TopupState;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+
 /**
  * Configure a process in this class's default context
- *  (specified as customer xsd), and execute it
- * 
- * @author royp
+ * (specified as customer xsd), and execute it
  *
+ * @author royp
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:org/seefin/plan/tests/TopupProcess-context.xml"})
-public class TestTopupXSDProcess
-{
-	@Resource
-	private ProcessGroup<TopupRequest> topupWorkflow;
-	
-	@Test
-	public void
-	testContextually()
-	{
-		TopupRequest context = new TopupRequest("+353861018765", BigDecimal.TEN);
-		topupWorkflow.execute ( context);
+@ContextConfiguration(locations = {"classpath:org/seefin/plan/tests/TopupProcess-context.xml"})
+public class TestTopupXSDProcess {
+    @Resource
+    private ProcessGroup<TopupRequest> topupWorkflow;
 
-		Assert.assertSame ( context.getState(), TopupState.NOTIFIED);
-	}
-	
+    @Test
+    public void
+    testContextually() {
+        TopupRequest context = new TopupRequest("+353861018765", BigDecimal.TEN);
+        topupWorkflow.execute(context);
+
+        Assert.assertSame(context.getState(), TopupState.NOTIFIED);
+    }
+
 }

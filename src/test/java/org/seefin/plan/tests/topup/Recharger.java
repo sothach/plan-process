@@ -5,11 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Recharger
-	implements ProcessNode<TopupRequest>
-{
-	@Override
-	public void execute ( TopupRequest context)
-	{
-		context.setState (  TopupState.CREDIT_APPLIED);
-	}
+        implements ProcessNode<TopupRequest> {
+    @Override
+    public void execute(TopupRequest context) {
+        context.setState(TopupState.CREDIT_APPLIED);
+    }
 }

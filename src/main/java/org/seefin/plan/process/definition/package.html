@@ -1,89 +1,111 @@
 <html>
 Java library for the definition and execution of defined processes
 <body>
- <head>
+<head>
     <title>PLAN Library package javadoc</title>
- </head>
-<style> 
+</head>
+<style>
     <!--
-	p { color:#0B0B61; font-size:10pt;
-		font-family:"comic sans ms",sans-serif; }
-	h1 { color:#660000; font-family:"arial"; font-size:14pt; }
-	h2 { color:#660000; font-family:"arial"; font-size:12pt; }
-dl {
-    margin-bottom:50px;
-}
- 
-dt {
-    float:left;
-    font-weight:bold;
-    margin-right:1px;
-    padding:1px;
-    width:15%;
-}
- 
-dd {
-    margin:1px 0;
-    padding:1px 0;
-}
+    p {
+        color: #0B0B61;
+        font-size: 10pt;
+        font-family: "comic sans ms", sans-serif;
+    }
+
+    h1 {
+        color: #660000;
+        font-family: "arial";
+        font-size: 14pt;
+    }
+
+    h2 {
+        color: #660000;
+        font-family: "arial";
+        font-size: 12pt;
+    }
+
+    dl {
+        margin-bottom: 50px;
+    }
+
+    dt {
+        float: left;
+        font-weight: bold;
+        margin-right: 1px;
+        padding: 1px;
+        width: 15%;
+    }
+
+    dd {
+        margin: 1px 0;
+        padding: 1px 0;
+    }
+
     -->
 </style>
 <h1>Plan Process Framework</h1>
 <h2>Process Lifecycle Automation Notation</h2>
 <p>
-The Plan framework is a extremely small and light Java library for defining and executing processes.
-In concept, these processes are similar to workflows, but the framework explicitly refrains from addressing
-elements commonly found in workflow solutions, such as diagramming, standard process model compliance or 
-integration with databases or service interfaces.
+    The Plan framework is a extremely small and light Java library for defining and executing processes.
+    In concept, these processes are similar to workflows, but the framework explicitly refrains from addressing
+    elements commonly found in workflow solutions, such as diagramming, standard process model compliance or
+    integration with databases or service interfaces.
 <p/>
 Instead, Plan seeks to implement a simple state-driven process model, as a method of defining processing
-steps outside of code.  This motivation is to enable general process steps ('actions') to be combined in
-different sequences, without resorting to procedural coding.  Although Plan can be used via a programatic 
+steps outside of code. This motivation is to enable general process steps ('actions') to be combined in
+different sequences, without resorting to procedural coding. Although Plan can be used via a programatic
 API, the preferred method is to declaratively specify processes in XML, specifically a custom schema built
-upon  Spring's Bean Application Context framework.
+upon Spring's Bean Application Context framework.
 </p>
 <h2>Terms</h2>
 <dl>
-<dt>Process Group</dt><dd>A group of one or more steps defining a process</dd>
-<dt>Process Node</dt><dd>Either a specific action, or a recursive process group (sub-process)</dd>
-<dt>Transition</dt><dd>A state mapped to action to be executed</dd>
-<dt>State</dt><dd>Domain of state values, often summary states for specific processing outcomes</dd>
-<dt>Process Context</dt><dd>The object of processing, often a request</dd>
+    <dt>Process Group</dt>
+    <dd>A group of one or more steps defining a process</dd>
+    <dt>Process Node</dt>
+    <dd>Either a specific action, or a recursive process group (sub-process)</dd>
+    <dt>Transition</dt>
+    <dd>A state mapped to action to be executed</dd>
+    <dt>State</dt>
+    <dd>Domain of state values, often summary states for specific processing outcomes</dd>
+    <dt>Process Context</dt>
+    <dd>The object of processing, often a request</dd>
 </dl>
 <h2>Concepts</h2>
 <p>
-Processes are defined as a set if transitions, mapping state values to actions.  These transitions 
-are of the form <i>when</i> (state) <i>then</i> (action).<p/>
+    Processes are defined as a set if transitions, mapping state values to actions. These transitions
+    are of the form <i>when</i> (state) <i>then</i> (action).
+<p/>
 <p>
-Execution of a process is a loop in which the context state is used to look-up an action, which is
-then executed (upon the context object), potentially changing the state of the context object.  
-On the next iteration, the context object's new state is looked-up in the process's transition map, 
-and if an action is found, it is executed.  This process terminates when the context's state does
-not map to an action.
-<h2>Looping</h3>
+    Execution of a process is a loop in which the context state is used to look-up an action, which is
+    then executed (upon the context object), potentially changing the state of the context object.
+    On the next iteration, the context object's new state is looked-up in the process's transition map,
+    and if an action is found, it is executed. This process terminates when the context's state does
+    not map to an action.
+    <h2>Looping</h3>
 <p>
-A single processing step can be iterative executed by having it leave the context state mapped to that action.
-This will cause the process to loop until the state is changed.  For example, a counter in the context could 
-be decremented on each call until it is zero, at which point the state of the context is changed and 
-execution continues with the action mapped to the new state.<br/> 
-As with any loop, careless coding can cause infinite looping.
-<h2>Selection</h3>
+    A single processing step can be iterative executed by having it leave the context state mapped to that action.
+    This will cause the process to loop until the state is changed. For example, a counter in the context could
+    be decremented on each call until it is zero, at which point the state of the context is changed and
+    execution continues with the action mapped to the new state.<br/>
+    As with any loop, careless coding can cause infinite looping.
+    <h2>Selection</h3>
 <p>
-Selecting alternative actions in the process is facilitated by arranging for an action to set the context state
-to the input state of the desired next step.
-<h2>Termination</h3>
+    Selecting alternative actions in the process is facilitated by arranging for an action to set the context state
+    to the input state of the desired next step.
+    <h2>Termination</h3>
 <p>
-The process ends when the context's current state is not mapped to any action.  The abstract query <code>failed()</code>
-on the State interface can be queried to determine if the process failed.
+    The process ends when the context's current state is not mapped to any action. The abstract query
+    <code>failed()</code>
+    on the State interface can be queried to determine if the process failed.
 <h1>Spring Context</h1>
 <p>
-The easiest way to define a process, is by using the Plan xsd schema in a Spring context definition.
-See {@link org.seefin.plan.process.ProcessGroup} for an example of this syntax.
+    The easiest way to define a process, is by using the Plan xsd schema in a Spring context definition.
+    See {@link org.seefin.plan.process.ProcessGroup} for an example of this syntax.
 <p>
-The schema can be included in the Spring context by mapping the prefix, as in the XML header below:
+    The schema can be included in the Spring context by mapping the prefix, as in the XML header below:
 <pre>
 <?xml version="1.0" encoding="UTF-8"?>
-&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    &lt;beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        <b>xmlns:plan=<font color='blue'>"http://seefin.org/schema/plan"</font></b>
        xmlns:ctx="http://www.springframework.org/schema/context"
@@ -95,22 +117,28 @@ The schema can be included in the Spring context by mapping the prefix, as in th
 Now, a PLAN process definition can be defined using the <code>plan:</code> namespace defined:
 <pre><font color='green'>
  &lt;plan:process <font color='brown'>id=<font color='blue'>"flightBooker"</font> 
- 	<font color='brown'>state-class=<font color='blue'>"org.seefin.plan.tests.booking.BookingState"</font> &gt;<font color='green'>
- 	&lt;plan:node <font color='brown'>state=<font color='blue'>"OPEN"</font> <font color='brown'>action-ref=<font color='blue'>"validator"</font> /&gt;<font color='green'>
- 	&lt;plan:node <font color='brown'>state=<font color='blue'>"PAID"</font> <font color='brown'>action=<font color='blue'>"org.seefin.plan.tests.booking.BookingAction"</font> /&gt;<font color='green'>
- 	&lt;plan:node <font color='brown'>state=<font color='blue'>"BOOKED</font>" <font color='brown'>action-ref=<font color='blue'>"notifier"</font> /&gt;<font color='green'>
+ 	<font color='brown'>state-class=<font color='blue'>"org.seefin.plan.tests.booking.BookingState"</font> &gt;<font
+            color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"OPEN"</font> <font color='brown'>action-ref=<font
+            color='blue'>"validator"</font> /&gt;<font color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"PAID"</font> <font color='brown'>action=<font
+            color='blue'>"org.seefin.plan.tests.booking.BookingAction"</font> /&gt;<font color='green'>
+ 	&lt;plan:node <font color='brown'>state=<font color='blue'>"BOOKED</font>" <font color='brown'>action-ref=<font
+            color='blue'>"notifier"</font> /&gt;<font color='green'>
  &lt;/plan:process&gt;
 </pre>
 <p>
-This process can be injected into the application code that needs to use it:
+    This process can be injected into the application code that needs to use it:
 <pre>
 <font color='brown'>
 @Resource<font color='black'>
 private<font color='blue'> ProcessGroup<FlightBooking> <font color='green'>flightBooker;
     ...<font color='blue'>
-    SimpleDateFormat <font color='black'>sdf = <font color='black'>new <font color='green'>SimpleDateFormat (<font color='blue'>"dd/MM/yyyy");
+    SimpleDateFormat <font color='black'>sdf = <font color='black'>new <font color='green'>SimpleDateFormat (<font
+            color='blue'>"dd/MM/yyyy");
 	FlightBooking request = <font color='black'>new <font color='green'>FlightBooking ( 
-			sdf.parse (<font color='blue'> "01/01/2012"), IATAAirportCode.<font color='blue'>DUB, IATAAirportCode.<font color='blue'>WAT);
+			sdf.parse (<font color='blue'> "01/01/2012"), IATAAirportCode.<font color='blue'>DUB, IATAAirportCode.<font
+                    color='blue'>WAT);
 	<font color='green'>request.setState ( BookingState.<font color='blue'>OPEN);
 	<font color='green'>flightBooker.execute ( request);
     ...
